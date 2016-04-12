@@ -2,21 +2,25 @@ saved_name = 'C';
 s = load('ORLFACEDATABASE.mat',saved_name);
 d = s.(saved_name);
 
+training = 4;
+
 Z = rotdim(d(:,1:5));
 
 for i = 1:39
 	j = i*10 + 1; 
-	Z = cat(1,Z,rotdim(d(:,j:j+4)));
+	Z = cat(1,Z,rotdim(d(:,j:j+training)));
 endfor
 
-covZ = cov(Z);
-[v,lambda] = eigs(covZ);
+dimensions = 100;
 
-meanFaces = zeros(40,6);
+covZ = cov(Z);
+[v,lambda] = eigs(covZ,dimensions);
+
+meanFaces = zeros(40,dimensions);
 
 for i = 0:39
 	j = i*10 + 1;
-	temp = double(rotdim(d(:,j:j+4))) * v;
+	temp = double(rotdim(d(:,j:j+training))) * v;
 	meanFaces(i+1,:) = mean(temp,1);
 endfor
 
@@ -24,9 +28,9 @@ endfor
 
 errorRate = 0;
 
-for l = 0:4
+for l = 0:(8-training)
 	for i = 0:39
-		j = i*10 + 6 + l;
+		j = i*10 + training + 2 + l;
 		newVector = double(rotdim(d(:,j))) * v;
 		
 		minimumDistance = norm(meanFaces(1,:) - newVector,2);
@@ -48,6 +52,6 @@ for l = 0:4
 	endfor
 endfor
 
-errorRate
+errorRate/2
 
 
