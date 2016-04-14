@@ -2,9 +2,9 @@ saved_name = 'C';
 s = load('ORLFACEDATABASE.mat',saved_name);
 d = s.(saved_name);
 
-training = 4;
+training = 5;
 
-Z = rotdim(d(:,1:5));
+Z = rotdim(d(:,1:1+training));
 
 for i = 1:39
 	j = i*10 + 1; 
@@ -52,6 +52,6 @@ for l = 0:(8-training)
 	endfor
 endfor
 
-errorRate/2
+errorRate*100/(40*(9-training))
 
 
